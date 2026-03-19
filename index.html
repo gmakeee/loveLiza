@@ -4,269 +4,292 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Для Лизы 🩷</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --hue: 340;
-      --glow: rgba(220, 38, 100, 0.12);
-    }
-
     body {
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
       background: #080006;
       font-family: 'Plus Jakarta Sans', sans-serif;
       overflow: hidden;
       user-select: none;
-      transition: background 1s ease;
+      transition: background 1.2s ease;
     }
 
     /* Stars */
     #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
     .star {
-      position: absolute;
-      background: #fff;
-      border-radius: 50%;
-      animation: twinkle var(--dur, 3s) ease-in-out infinite;
-      opacity: 0;
+      position: absolute; background: #fff; border-radius: 50%;
+      animation: twinkle var(--dur, 3s) ease-in-out infinite; opacity: 0;
     }
     @keyframes twinkle {
-      0%, 100% { opacity: 0; transform: scale(0.8); }
+      0%,100% { opacity: 0; transform: scale(0.8); }
       50% { opacity: var(--op, 0.6); transform: scale(1.2); }
     }
 
-    /* Ambient background glow */
-    .bg-glow {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
+    /* Cursor sparkle trail */
+    .spark {
+      position: fixed; pointer-events: none; z-index: 999;
+      font-size: 14px;
+      animation: spark-die 0.8s ease-out forwards;
     }
+    @keyframes spark-die {
+      0%   { opacity: 1; transform: scale(1) translateY(0); }
+      100% { opacity: 0; transform: scale(0.3) translateY(-30px); }
+    }
+
+    /* Ambient glow */
+    .bg-glow { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
     .bg-glow::before {
       content: '';
-      position: absolute;
-      top: 50%; left: 50%;
+      position: absolute; top: 50%; left: 50%;
       width: 700px; height: 700px;
       transform: translate(-50%, -50%);
-      background: radial-gradient(ellipse, var(--glow) 0%, transparent 70%);
+      background: radial-gradient(ellipse, rgba(220,38,100,0.13) 0%, transparent 70%);
       animation: breathe 4s ease-in-out infinite;
-      transition: background 1s ease;
     }
     @keyframes breathe {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-      50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+      0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 0.8; }
+      50% { transform: translate(-50%,-50%) scale(1.2); opacity: 1; }
     }
+
+    /* Love meter bar */
+    .meter-wrap {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      height: 3px; background: rgba(255,255,255,0.04);
+    }
+    .meter-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #c0154a, #ff6fa8, #ffc2d4);
+      box-shadow: 0 0 10px rgba(220,38,100,0.6);
+      transition: width 0.5s ease;
+    }
+    .meter-label {
+      position: fixed; top: 8px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px; color: rgba(255,150,185,0.5);
+      letter-spacing: 0.2em; text-transform: uppercase; z-index: 51;
+      opacity: 0; transition: opacity 0.4s;
+    }
+    .meter-label.show { opacity: 1; }
 
     /* Name */
     .name {
       position: relative; z-index: 10;
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
+      font-family: 'Playfair Display', serif; font-style: italic;
       font-size: clamp(1rem, 4vw, 1.4rem);
       color: rgba(255, 160, 190, 0.55);
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      margin-bottom: 36px;
+      letter-spacing: 0.35em; text-transform: uppercase;
+      margin-bottom: 32px;
     }
 
     /* Heart */
     .heart-wrap {
       position: relative; z-index: 10;
       display: flex; align-items: center; justify-content: center;
-      margin-bottom: 40px;
+      margin-bottom: 36px;
     }
-
     .heart-btn {
       background: none; border: none; cursor: pointer;
-      outline: none; padding: 0;
-      position: relative;
+      outline: none; padding: 0; position: relative;
       display: flex; align-items: center; justify-content: center;
     }
-
     .heart-btn svg {
-      width: clamp(110px, 28vw, 170px);
-      height: clamp(110px, 28vw, 170px);
-      filter: drop-shadow(0 0 32px rgba(220, 38, 100, 0.45));
+      width: clamp(110px, 28vw, 170px); height: clamp(110px, 28vw, 170px);
+      filter: drop-shadow(0 0 32px rgba(220,38,100,0.45));
       transition: filter 0.4s;
     }
-    .heart-btn:hover svg {
-      filter: drop-shadow(0 0 55px rgba(220, 38, 100, 0.75));
-    }
-
-    .heart-path {
-      fill: #c0154a;
-      transition: fill 0.6s ease;
-    }
+    .heart-btn:hover svg { filter: drop-shadow(0 0 55px rgba(220,38,100,0.75)); }
+    .heart-path { fill: #c0154a; transition: fill 0.8s ease; }
 
     .heart-btn.beat svg { animation: beat 0.45s ease; }
     @keyframes beat {
-      0%   { transform: scale(1); }
-      30%  { transform: scale(1.38); }
-      65%  { transform: scale(0.9); }
+      0% { transform: scale(1); }
+      30% { transform: scale(1.38); }
+      65% { transform: scale(0.9); }
       100% { transform: scale(1); }
     }
+    /* Idle beat */
+    .heart-btn.idle-pulse svg { animation: idle-beat 1.2s ease-in-out; }
+    @keyframes idle-beat {
+      0%,100% { transform: scale(1); }
+      30% { transform: scale(1.08); }
+      60% { transform: scale(0.97); }
+    }
 
-    /* Click count badge on heart */
+    /* Badge */
     .heart-badge {
-      position: absolute;
-      top: -6px; right: -6px;
+      position: absolute; top: -6px; right: -6px;
       background: linear-gradient(135deg, #ff5a8e, #e8185c);
-      color: #fff;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 12px;
-      font-weight: 700;
-      min-width: 24px;
-      height: 24px;
-      padding: 0 6px;
-      border-radius: 999px;
+      color: #fff; font-family: 'Plus Jakarta Sans'; font-size: 12px; font-weight: 700;
+      min-width: 24px; height: 24px; padding: 0 7px; border-radius: 999px;
       display: flex; align-items: center; justify-content: center;
-      opacity: 0;
-      transform: scale(0.5);
+      opacity: 0; transform: scale(0.5);
       transition: opacity 0.4s, transform 0.4s;
-      box-shadow: 0 2px 10px rgba(232, 24, 92, 0.5);
+      box-shadow: 0 2px 10px rgba(232,24,92,0.5);
     }
     .heart-badge.show { opacity: 1; transform: scale(1); }
 
     /* Pulse ring */
     .pulse-ring {
       position: absolute;
-      width: clamp(110px, 28vw, 170px);
-      height: clamp(110px, 28vw, 170px);
+      width: clamp(110px, 28vw, 170px); height: clamp(110px, 28vw, 170px);
       border-radius: 50%;
-      border: 2px solid rgba(220, 38, 100, 0.55);
+      border: 2px solid rgba(220,38,100,0.55);
       animation: ring-out 0.9s ease-out forwards;
       pointer-events: none;
     }
     @keyframes ring-out {
-      0%   { transform: scale(1); opacity: 0.9; }
+      0% { transform: scale(1); opacity: 0.9; }
       100% { transform: scale(2.4); opacity: 0; }
     }
 
     /* Message */
     .message-box {
       position: relative; z-index: 10;
-      min-height: 90px;
-      max-width: min(500px, 90vw);
-      text-align: center;
-      padding: 0 24px;
+      min-height: 90px; max-width: min(520px, 90vw);
+      text-align: center; padding: 0 24px;
     }
-
     .message {
       font-family: 'Playfair Display', serif;
       font-size: clamp(1.05rem, 3.5vw, 1.55rem);
-      line-height: 1.65;
-      color: #fff;
-      opacity: 0;
-      transform: translateY(18px);
+      line-height: 1.65; color: #fff;
+      opacity: 0; transform: translateY(18px);
       transition: opacity 0.55s ease, transform 0.55s ease;
     }
     .message.visible { opacity: 1; transform: translateY(0); }
     .message.hiding  { opacity: 0; transform: translateY(-14px); }
     .message em { color: #f4789a; font-style: italic; }
-    .message strong { color: #ffb3ce; font-style: normal; }
+    .message strong { color: #ffb3ce; font-weight: 600; }
+    .message .cursor { display: inline-block; width: 2px; height: 1.1em; background: #f4789a; margin-left: 2px; vertical-align: text-bottom; animation: blink 0.8s step-end infinite; }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* Hint */
+    .hint {
+      position: relative; z-index: 10;
+      margin-top: 8px; font-size: 11px;
+      color: rgba(255,255,255,0.2); letter-spacing: 0.18em; text-transform: uppercase;
+      transition: opacity 1s;
+    }
+    .hint.hidden { opacity: 0; pointer-events: none; }
 
     /* Big counter */
     .counter-wrap {
       position: relative; z-index: 10;
-      margin-top: 36px;
-      text-align: center;
-      min-height: 64px;
+      margin-top: 28px; text-align: center; min-height: 64px;
     }
     .counter-num {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(2.8rem, 10vw, 5rem);
-      font-weight: 700;
-      line-height: 1;
+      font-size: clamp(2.8rem, 10vw, 5rem); font-weight: 700; line-height: 1;
       color: transparent;
       background: linear-gradient(135deg, #ff6fa8, #e8185c, #ff9ec4);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      opacity: 0;
-      transition: opacity 0.5s, transform 0.3s;
-      transform: scale(0.85);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      opacity: 0; transition: opacity 0.5s, transform 0.3s; transform: scale(0.85);
     }
     .counter-num.show { opacity: 1; transform: scale(1); }
     .counter-num.pop  { animation: num-pop 0.3s ease; }
-    @keyframes num-pop {
-      0%   { transform: scale(1); }
-      40%  { transform: scale(1.25); }
-      100% { transform: scale(1); }
-    }
-    .counter-label {
-      font-size: 12px;
-      color: rgba(255,255,255,0.25);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin-top: 4px;
-    }
+    @keyframes num-pop { 0% { transform: scale(1); } 40% { transform: scale(1.25); } 100% { transform: scale(1); } }
+    .counter-label { font-size: 11px; color: rgba(255,255,255,0.22); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 4px; }
 
-    /* Milestone toast */
+    /* Rapid-click combo flash */
+    .combo-flash {
+      position: fixed; inset: 0; z-index: 200; pointer-events: none;
+      background: radial-gradient(ellipse, rgba(255,100,162,0.18), transparent 70%);
+      opacity: 0; animation: flash-in 0.6s ease forwards;
+    }
+    @keyframes flash-in { 0% { opacity: 1; } 100% { opacity: 0; } }
+
+    /* Toast */
     .toast {
-      position: fixed;
-      bottom: 40px; left: 50%;
+      position: fixed; bottom: 40px; left: 50%;
       transform: translateX(-50%) translateY(80px);
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 130, 170, 0.3);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,130,170,0.3);
       backdrop-filter: blur(16px);
-      padding: 14px 28px;
-      border-radius: 999px;
-      color: #ffcde0;
-      font-size: 14px;
-      font-weight: 500;
-      white-space: nowrap;
-      opacity: 0;
+      padding: 14px 28px; border-radius: 999px;
+      color: #ffcde0; font-size: 14px; font-weight: 500;
+      white-space: nowrap; opacity: 0;
       transition: transform 0.5s ease, opacity 0.5s ease;
       z-index: 100;
     }
     .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-    /* Hint */
-    .hint {
-      position: relative; z-index: 10;
-      margin-top: 16px;
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.2);
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      transition: opacity 1s;
+    /* "Шалава" secret button */
+    .shalava-btn {
+      position: fixed; bottom: 20px; right: 20px; z-index: 200;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,100,150,0.2);
+      color: rgba(255,160,190,0.5);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 11px; font-weight: 600;
+      padding: 8px 16px; border-radius: 999px;
+      cursor: pointer; letter-spacing: 0.05em;
+      transition: color 0.3s, border-color 0.3s, background 0.3s;
+      backdrop-filter: blur(10px);
     }
-    .hint.hidden { opacity: 0; pointer-events: none; }
+    .shalava-btn:hover {
+      color: rgba(255,180,210,0.9);
+      border-color: rgba(255,100,150,0.5);
+      background: rgba(255,100,150,0.08);
+    }
 
-    /* Float particles */
+    /* Vampire popup */
+    .vampire-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(12px);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .vampire-overlay.show { opacity: 1; pointer-events: all; }
+    .vampire-card {
+      background: rgba(25, 5, 20, 0.9);
+      border: 1px solid rgba(200,50,100,0.3);
+      border-radius: 28px; padding: 48px 52px;
+      text-align: center; max-width: 380px;
+      transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .vampire-overlay.show .vampire-card { transform: scale(1); }
+    .vampire-emoji { font-size: 80px; display: block; margin-bottom: 20px; animation: vamp-float 3s ease-in-out infinite; }
+    @keyframes vamp-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    .vampire-text {
+      font-family: 'Playfair Display', serif; font-style: italic;
+      font-size: clamp(1.2rem, 4vw, 1.6rem); color: #ffcde0; line-height: 1.5;
+    }
+    .vampire-close {
+      margin-top: 28px; background: none; border: 1px solid rgba(255,100,150,0.3);
+      color: rgba(255,160,190,0.6); padding: 10px 24px; border-radius: 999px;
+      cursor: pointer; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: all 0.2s;
+    }
+    .vampire-close:hover { color: #ffcde0; border-color: rgba(255,100,150,0.6); }
+
+    /* Particles / confetti */
     .particle {
       position: fixed; pointer-events: none; z-index: 5;
       animation: float-up var(--dur, 2s) ease-out forwards;
     }
-    @keyframes float-up {
-      0%   { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(-260px) scale(0.2) rotate(25deg); opacity: 0; }
-    }
-
-    /* Confetti piece */
+    @keyframes float-up { 0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; } 100% { transform: translateY(-280px) scale(0.2) rotate(25deg); opacity: 0; } }
     .confetti {
-      position: fixed;
-      width: 8px; height: 8px;
-      border-radius: 2px;
-      pointer-events: none;
-      z-index: 5;
+      position: fixed; width: 8px; height: 8px; border-radius: 2px;
+      pointer-events: none; z-index: 5;
       animation: confetti-fall var(--dur, 2s) ease-out forwards;
     }
-    @keyframes confetti-fall {
-      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(400px) rotate(720deg); opacity: 0; }
-    }
+    @keyframes confetti-fall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(400px) rotate(720deg); opacity: 0; } }
   </style>
 </head>
 <body>
 
   <div id="stars"></div>
   <div class="bg-glow"></div>
+
+  <!-- Love meter -->
+  <div class="meter-wrap"><div class="meter-fill" id="meterFill"></div></div>
+  <div class="meter-label" id="meterLabel">уровень любви</div>
 
   <div class="name">Лиза</div>
 
@@ -282,7 +305,6 @@
   <div class="message-box">
     <p class="message" id="msg"></p>
   </div>
-
   <div class="hint" id="hint">нажми на сердце</div>
 
   <div class="counter-wrap">
@@ -292,215 +314,406 @@
 
   <div class="toast" id="toast"></div>
 
-  <script>
-    const messages = [
-      "Я люблю тебя, <em>Лиза</em>.",
-      "Ты - лучшее, что со мной случилось.",
-      "С тобой даже обычный день становится особенным.",
-      "Я думаю о тебе чаще, чем ты <em>можешь представить</em>.",
-      "Ты делаешь меня лучше - просто своим присутствием.",
-      "Люблю тебя сегодня чуть больше, чем вчера.",
-      "Ты - моё любимое место в этом мире.",
-      "Каждый раз, когда ты улыбаешься, я влюбляюсь заново.",
-      "Я рядом. Всегда. <em>Для тебя.</em>",
-      "Ты - самый важный человек в моей жизни.",
-      "С тобой мне не нужно больше ничего.",
-      "Мне нравится, какая ты есть.",
-      "Ты моя <em>Лиза</em> - и это всё объясняет.",
-      "Я бесконечно рад, что ты есть.",
-      "Каждый день с тобой - подарок.",
-      "Ты красивее всего на свете. Объективно.",
-      "Я выбираю тебя. Снова и снова.",
-      "Люблю тебя до самых краёв - а сердце большое.",
-      "Ты - мой <em>тихий уют</em> в этом шумном мире.",
-      "Если бы можно было выбрать снова - только ты.",
-      "Ты знаешь, как меня успокоить, даже не зная об этом.",
-      "Твой смех - мой любимый звук.",
-      "Я хочу, чтобы тебе было хорошо. Всегда.",
-      "С тобой не страшно. Совсем.",
-      "Ты моя самая любимая <em>глупость</em>.",
-      "Некоторые вещи не нужно объяснять. Ты - одна из них.",
-      "Я скучаю по тебе, даже когда ты рядом.",
-      "Ты делаешь мой мир <strong>теплее</strong>.",
-      "Любить тебя - самое естественное, что я умею.",
-      "Ты замечательная. Я просто хочу, чтобы ты это знала.",
-      "Мне нравится, как ты думаешь. И как ты смотришь. И вообще.",
-      "Ты - <em>моя</em>. И я очень этому рад.",
-      "Каждое утро лучше, когда ты в нём есть.",
-      "Я благодарен за тебя каждый день.",
-      "Нет никого, с кем я хотел бы быть больше, чем с тобой.",
-      "Ты - дом. Где бы мы ни были.",
-      "Люблю тебя <em>очень сильно</em>. Это важно знать.",
-      "Ты - моя <strong>любимая история</strong>.",
-      "Иногда я смотрю на тебя и не верю, что так бывает.",
-      "Ты лучше, чем я заслуживаю. И я постараюсь догнать.",
-    ];
+  <!-- Secret button -->
+  <button class="shalava-btn" onclick="showVampire()">Сегодня я шалава</button>
 
-    const milestones = {
-      5:   "5 раз - и я всё равно не устал 🩷",
-      10:  "10! Лиза, ты идеальная ✨",
-      20:  "20 раз - это уже серьёзно 😍",
-      50:  "50!! Ты точно лучшая в мире 🌸",
-      100: "100 раз. Сотня. Я не останавливаюсь 💫",
+  <!-- Vampire popup -->
+  <div class="vampire-overlay" id="vampireOverlay" onclick="closeVampire(event)">
+    <div class="vampire-card">
+      <span class="vampire-emoji">🧛‍♀️</span>
+      <p class="vampire-text">Даже такой я тебя люблю</p>
+      <button class="vampire-close" onclick="closeVampireBtn()">ну и ладно 🩷</button>
+    </div>
+  </div>
+
+  <script>
+  const messages = [
+    // Original 40
+    "Я люблю тебя, <em>Лиза</em>.",
+    "Ты - лучшее, что со мной случилось.",
+    "С тобой даже обычный день становится особенным.",
+    "Я думаю о тебе чаще, чем ты <em>можешь представить</em>.",
+    "Ты делаешь меня лучше - просто своим присутствием.",
+    "Люблю тебя сегодня чуть больше, чем вчера.",
+    "Ты - моё любимое место в этом мире.",
+    "Каждый раз, когда ты улыбаешься, я влюбляюсь заново.",
+    "Я рядом. Всегда. <em>Для тебя.</em>",
+    "Ты - самый важный человек в моей жизни.",
+    "С тобой мне не нужно больше ничего.",
+    "Мне нравится, какая ты есть.",
+    "Ты моя <em>Лиза</em> - и это всё объясняет.",
+    "Я бесконечно рад, что ты есть.",
+    "Каждый день с тобой - подарок.",
+    "Ты красивее всего на свете. Объективно.",
+    "Я выбираю тебя. Снова и снова.",
+    "Люблю тебя до самых краёв - а сердце большое.",
+    "Ты - мой <em>тихий уют</em> в этом шумном мире.",
+    "Если бы можно было выбрать снова - только ты.",
+    "Ты знаешь, как меня успокоить, даже не зная об этом.",
+    "Твой смех - мой любимый звук.",
+    "Я хочу, чтобы тебе было хорошо. Всегда.",
+    "С тобой не страшно. Совсем.",
+    "Ты моя самая любимая <em>глупость</em>.",
+    "Некоторые вещи не нужно объяснять. Ты - одна из них.",
+    "Я скучаю по тебе, даже когда ты рядом.",
+    "Ты делаешь мой мир <strong>теплее</strong>.",
+    "Любить тебя - самое естественное, что я умею.",
+    "Ты замечательная. Я просто хочу, чтобы ты это знала.",
+    "Мне нравится, как ты думаешь. И как ты смотришь. И вообще.",
+    "Ты - <em>моя</em>. И я очень этому рад.",
+    "Каждое утро лучше, когда ты в нём есть.",
+    "Я благодарен за тебя каждый день.",
+    "Нет никого, с кем я хотел бы быть больше, чем с тобой.",
+    "Ты - дом. Где бы мы ни были.",
+    "Люблю тебя <em>очень сильно</em>. Это важно знать.",
+    "Ты - моя <strong>любимая история</strong>.",
+    "Иногда я смотрю на тебя и не верю, что так бывает.",
+    "Ты лучше, чем я заслуживаю. И я постараюсь догнать.",
+    // NEW 100
+    "Ты - моя любимая неожиданность.",
+    "Я влюблён в тебя даже в самые обычные моменты.",
+    "Ты умеешь делать всё особенным.",
+    "Рядом с тобой я чувствую себя собой.",
+    "Твои глаза - самое честное, что я знаю.",
+    "Я хочу, чтобы каждый твой день был хорошим.",
+    "Смешно, но ты буквально моя любимая.",
+    "Ты - лучшее, что есть в моём мире.",
+    "Я не устаю <em>любить тебя</em>.",
+    "Мне с тобой как-то особенно хорошо.",
+    "Ты трогаешь что-то очень глубокое.",
+    "Быть рядом с тобой - настоящая роскошь.",
+    "Ты вспыхиваешь у меня в голове без предупреждения.",
+    "Твоя улыбка поднимает настроение лучше любого лекарства.",
+    "Я хочу дарить тебе только хорошее.",
+    "Ты мягкая, но при этом такая своя.",
+    "Ты делаешь хаос чуть более переносимым.",
+    "Я думаю о тебе - и сразу немного лучше.",
+    "Любить тебя легко. Серьёзно.",
+    "Ты такая живая. Это <em>заразительно</em>.",
+    "Я нашёл в тебе что-то, чего давно искал.",
+    "С тобой хочется быть внимательным.",
+    "Ты - моя тихая радость.",
+    "Ты имеешь на меня какое-то магическое влияние.",
+    "Люблю тебя, несмотря ни на что. И благодаря всему.",
+    "Ты - это то, к чему хочется возвращаться.",
+    "Рядом с тобой время идёт иначе.",
+    "Я ценю каждую минуту с тобой.",
+    "Ты особенная. По-настоящему.",
+    "Мне нравится, что ты существуешь.",
+    "Ты - <strong>лучший человек</strong> в моём контакт-листе.",
+    "Я хочу знать всё о тебе. Вообще всё.",
+    "Ты умеешь быть настоящей. Это редкость.",
+    "Твои маленькие странности - мои любимые вещи в тебе.",
+    "Ты никогда не надоешь мне.",
+    "Ты заслуживаешь всего самого лучшего. Без исключений.",
+    "Если бы нужно было описать тебя одним словом - не хватило бы.",
+    "Какая же ты классная, <em>Лиза</em>.",
+    "Я горжусь, что ты моя.",
+    "Ты - это ответ на вопрос, который я давно носил в голове.",
+    "Твоё присутствие - это ощущение тепла.",
+    "Я хочу защищать тебя от всего плохого.",
+    "С тобой легко молчать. Это дорогого стоит.",
+    "Ты - моё любимое создание на планете.",
+    "Ты даже не знаешь, как много для меня значишь.",
+    "Мне нравится просто быть <em>с тобой</em>.",
+    "Ты - человек, которого я хочу видеть каждый день.",
+    "Я улыбаюсь, когда думаю о тебе. Непроизвольно.",
+    "Ты попала в меня точно по центру.",
+    "Ты - и есть мой любимый жанр.",
+    "Ты сложная и простая одновременно. Это прекрасно.",
+    "Рядом с тобой хочется быть лучше.",
+    "Ты приносишь в мою жизнь что-то, чего я не умею назвать, но очень чувствую.",
+    "Я обожаю тебя, <em>Лиза</em>. Без повода.",
+    "Ты - моя самая красивая мысль.",
+    "Каждый раз после тебя - немного лучше.",
+    "Твой голос - мой любимый звук.",
+    "Ты умеешь быть нежной, когда это нужно.",
+    "Я выбрал бы тебя в любой вселенной.",
+    "Ты делаешь меня спокойным.",
+    "Ты - настоящая. И это очень много.",
+    "Мне повезло, что ты есть.",
+    "Ты - <strong>лучший сюрприз</strong> в моей жизни.",
+    "Я хочу, чтобы ты чувствовала себя любимой. Каждый день.",
+    "Ты такая, какой ты и должна быть.",
+    "С тобой всё кажется возможным.",
+    "Твоя забота - одна из самых ценных вещей, что у меня есть.",
+    "Ты делаешь хорошее ещё лучше.",
+    "Я рад каждому дню, который начинается с мысли о тебе.",
+    "Ты - мой любимый <em>беспорядок</em>.",
+    "Ты умеешь удивлять. Мне это нравится.",
+    "Мне не нужны слова, чтобы объяснить, что ты для меня значишь.",
+    "Ты - это постоянство в непостоянном мире.",
+    "Я нежно люблю тебя. Очень.",
+    "Ты - моя любимая страничка в книге.",
+    "Смотреть на тебя - удовольствие.",
+    "Ты делаешь меня счастливым. Просто так.",
+    "Ты - единственная, о ком я думаю именно так.",
+    "Тебя стоит <strong>любить громко</strong>. Я стараюсь.",
+    "Ты моя маленькая вселенная.",
+    "Я хочу обнять тебя прямо сейчас.",
+    "Твои глаза запоминаются надолго.",
+    "Ты - мягкий свет в тёмной комнате.",
+    "Я принимаю тебя такой, какая ты есть. Полностью.",
+    "Ты - <em>моя персональная любимица</em>.",
+    "Ты вдохновляешь меня быть лучше.",
+    "Когда ты рядом, всё встаёт на своё место.",
+    "Ты - это то хорошее, ради чего стоит всё.",
+    "Я думал, так не бывает. Оказалось - бывает.",
+    "Ты - не просто любимая. Ты - любимая особенным образом.",
+    "С тобой я хочу делать всё самое обычное.",
+    "Ты - <strong>тёплая</strong>. Внутри и снаружи.",
+    "Ты моё любимое «да».",
+    "Я счастлив рядом с тобой. По-настоящему.",
+    "Ты - причина, по которой я верю в хорошее.",
+    "Мне хочется радовать тебя. Постоянно.",
+    "Ты - моё любимое место для возвращения.",
+    "Я люблю тебя, <em>Лиза</em>. Сегодня, завтра и послезавтра.",
+  ];
+
+  const milestones = {
+    5:   "5 - и я всё равно не устал 🩷",
+    10:  "10! Лиза, ты идеальная ✨",
+    20:  "20 раз - это уже серьёзно 😍",
+    30:  "30! Слушай, ты прекрасна 🌸",
+    50:  "50! Ты точно лучшая в мире 🎉",
+    77:  "77 - счастливое число, как и ты 🍀",
+    100: "100 РАЗ. Сотня. Не останавливаюсь 💫",
+    150: "150... Лизочка, ты что-то сделала с этой страницей 🫶",
+  };
+
+  const heartColorStages = [
+    { at: 0,   fill: '#c0154a' },
+    { at: 10,  fill: '#d42060' },
+    { at: 25,  fill: '#e02860' },
+    { at: 50,  fill: '#f04070' },
+    { at: 100, fill: '#ff6fa8' },
+    { at: 150, fill: '#ffaad0' },
+  ];
+
+  const sparkEmojis = ['✨','🌸','💕','❤️','🩷','💗','🌟','✦'];
+  let clicks = 0;
+  let lastIndex = -1;
+  let rapidClickCount = 0;
+  let rapidTimer = null;
+  let idleTimer = null;
+
+  const msgEl       = document.getElementById('msg');
+  const hintEl      = document.getElementById('hint');
+  const counterNum  = document.getElementById('counterNum');
+  const counterLabel= document.getElementById('counterLabel');
+  const badge       = document.getElementById('badge');
+  const toast       = document.getElementById('toast');
+  const heartPath   = document.getElementById('heartPath');
+  const heartBtn    = document.getElementById('heartBtn');
+  const meterFill   = document.getElementById('meterFill');
+  const meterLabel  = document.getElementById('meterLabel');
+
+  // Stars
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 90; i++) {
+    const s = document.createElement('div'); s.className = 'star';
+    const sz = 1 + Math.random() * 2.5;
+    s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--dur:${2+Math.random()*4}s;--op:${0.3+Math.random()*0.6};animation-delay:${Math.random()*5}s;`;
+    starsEl.appendChild(s);
+  }
+
+  // Cursor sparkle trail
+  let lastSpark = 0;
+  document.addEventListener('mousemove', (e) => {
+    const now = Date.now();
+    if (now - lastSpark < 120) return;
+    lastSpark = now;
+    const sp = document.createElement('div');
+    sp.className = 'spark';
+    sp.textContent = sparkEmojis[Math.floor(Math.random() * sparkEmojis.length)];
+    sp.style.left = (e.clientX + (Math.random()-0.5)*20) + 'px';
+    sp.style.top  = (e.clientY + (Math.random()-0.5)*20) + 'px';
+    document.body.appendChild(sp);
+    sp.addEventListener('animationend', () => sp.remove());
+  });
+
+  function getRandom() {
+    let idx;
+    do { idx = Math.floor(Math.random() * messages.length); }
+    while (idx === lastIndex);
+    lastIndex = idx;
+    return messages[idx];
+  }
+
+  function handleClick(e) {
+    clicks++;
+    hintEl.classList.add('hidden');
+
+    // Rapid-click combo detection
+    rapidClickCount++;
+    clearTimeout(rapidTimer);
+    rapidTimer = setTimeout(() => { rapidClickCount = 0; }, 700);
+    if (rapidClickCount >= 5) {
+      rapidClickCount = 0;
+      triggerMadLove();
+    }
+
+    // Idle reset
+    resetIdleTimer();
+
+    // Pulse ring
+    const ring = document.createElement('div'); ring.className = 'pulse-ring';
+    heartBtn.parentElement.appendChild(ring);
+    ring.addEventListener('animationend', () => ring.remove());
+
+    // Beat
+    heartBtn.classList.remove('beat'); void heartBtn.offsetWidth; heartBtn.classList.add('beat');
+    heartBtn.addEventListener('animationend', () => heartBtn.classList.remove('beat'), { once: true });
+
+    // Particles
+    spawnParticles();
+
+    // Typewriter message
+    showMessageTypewriter(getRandom());
+
+    // Counter
+    updateCounter();
+
+    // Badge
+    badge.textContent = clicks; badge.classList.add('show');
+
+    // Heart color
+    updateHeartColor();
+
+    // Love meter
+    updateMeter();
+
+    // Milestones
+    if (milestones[clicks]) {
+      if (clicks === 50 || clicks === 100 || clicks === 150) spawnConfetti();
+      showToast(milestones[clicks]);
+    }
+  }
+
+  function updateCounter() {
+    counterNum.classList.add('show');
+    counterLabel.style.opacity = '1';
+    counterNum.textContent = clicks;
+    counterNum.classList.remove('pop'); void counterNum.offsetWidth; counterNum.classList.add('pop');
+  }
+
+  function updateHeartColor() {
+    let color = heartColorStages[0].fill;
+    for (const s of heartColorStages) { if (clicks >= s.at) color = s.fill; }
+    heartPath.style.fill = color;
+  }
+
+  function updateMeter() {
+    const pct = Math.min((clicks / 100) * 100, 100);
+    meterFill.style.width = pct + '%';
+    meterLabel.classList.add('show');
+  }
+
+  // Typewriter effect for messages
+  function showMessageTypewriter(rawHtml) {
+    const doTypewrite = () => {
+      msgEl.innerHTML = '';
+      msgEl.classList.add('visible');
+      // Strip tags for typing, then set real html at end
+      const plainText = rawHtml.replace(/<[^>]+>/g, '');
+      let i = 0;
+      const cursor = document.createElement('span'); cursor.className = 'cursor'; cursor.textContent = '|';
+      msgEl.appendChild(cursor);
+      const interval = setInterval(() => {
+        cursor.before(document.createTextNode(plainText[i] || ''));
+        i++;
+        if (i >= plainText.length) {
+          clearInterval(interval);
+          setTimeout(() => {
+            msgEl.innerHTML = rawHtml;
+          }, 400);
+        }
+      }, 28);
     };
 
-    // Heart color stages
-    const heartColors = [
-      { at: 0,   fill: '#c0154a' },
-      { at: 10,  fill: '#d42060' },
-      { at: 25,  fill: '#e8305e' },
-      { at: 50,  fill: '#ff4d77' },
-      { at: 100, fill: '#ff6fa8' },
-    ];
-
-    let clicks = 0;
-    let lastIndex = -1;
-    const msgEl = document.getElementById('msg');
-    const hintEl = document.getElementById('hint');
-    const counterNum = document.getElementById('counterNum');
-    const counterLabel = document.getElementById('counterLabel');
-    const badge = document.getElementById('badge');
-    const toast = document.getElementById('toast');
-    const heartPath = document.getElementById('heartPath');
-    const heartBtn = document.getElementById('heartBtn');
-
-    // Build stars
-    const starsContainer = document.getElementById('stars');
-    for (let i = 0; i < 80; i++) {
-      const s = document.createElement('div');
-      s.className = 'star';
-      const size = 1 + Math.random() * 2.5;
-      s.style.cssText = `
-        width:${size}px; height:${size}px;
-        top:${Math.random()*100}%; left:${Math.random()*100}%;
-        --dur:${2 + Math.random() * 4}s;
-        --op:${0.3 + Math.random() * 0.6};
-        animation-delay:${Math.random() * 5}s;
-      `;
-      starsContainer.appendChild(s);
+    if (msgEl.classList.contains('visible')) {
+      msgEl.classList.add('hiding');
+      setTimeout(() => {
+        msgEl.classList.remove('hiding', 'visible');
+        void msgEl.offsetWidth;
+        doTypewrite();
+      }, 280);
+    } else {
+      doTypewrite();
     }
+  }
 
-    function getRandom() {
-      let idx;
-      do { idx = Math.floor(Math.random() * messages.length); }
-      while (idx === lastIndex);
-      lastIndex = idx;
-      return messages[idx];
+  function showToast(text) {
+    toast.textContent = text; toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3400);
+  }
+
+  // Rapid combo - mad love
+  function triggerMadLove() {
+    const flash = document.createElement('div'); flash.className = 'combo-flash';
+    document.body.appendChild(flash); flash.addEventListener('animationend', () => flash.remove());
+    showToast('ТЫ СВОДИШЬ МЕНЯ С УМА!! 🔥💕');
+    spawnConfetti();
+    for (let i = 0; i < 3; i++) setTimeout(() => spawnParticles(), i * 150);
+  }
+
+  // Idle heart pulse
+  function resetIdleTimer() {
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(idlePulse, 4000);
+  }
+  function idlePulse() {
+    heartBtn.classList.remove('idle-pulse'); void heartBtn.offsetWidth;
+    heartBtn.classList.add('idle-pulse');
+    heartBtn.addEventListener('animationend', () => { heartBtn.classList.remove('idle-pulse'); resetIdleTimer(); }, { once: true });
+  }
+  resetIdleTimer();
+
+  function spawnParticles() {
+    const emojis = ['❤️','🩷','💕','💗','💓','✨','💖','🌸','💝','🫶','🌟','💞'];
+    const count = 7 + Math.floor(Math.random() * 6);
+    const rect = heartBtn.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div'); p.className = 'particle';
+      p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      p.style.left = (cx + (Math.random()-0.5)*150) + 'px';
+      p.style.top  = (cy + (Math.random()-0.5)*90)  + 'px';
+      p.style.fontSize = (13 + Math.random()*18) + 'px';
+      p.style.setProperty('--dur', (1.4 + Math.random()*1.2) + 's');
+      p.style.animationDelay = (Math.random()*0.25) + 's';
+      document.body.appendChild(p);
+      p.addEventListener('animationend', () => p.remove());
     }
+  }
 
-    function handleClick(e) {
-      clicks++;
-
-      hintEl.classList.add('hidden');
-
-      // Pulse ring
-      const ring = document.createElement('div');
-      ring.className = 'pulse-ring';
-      heartBtn.parentElement.appendChild(ring);
-      ring.addEventListener('animationend', () => ring.remove());
-
-      // Beat
-      heartBtn.classList.remove('beat');
-      void heartBtn.offsetWidth;
-      heartBtn.classList.add('beat');
-      heartBtn.addEventListener('animationend', () => heartBtn.classList.remove('beat'), { once: true });
-
-      // Particles
-      spawnParticles();
-
-      // Message
-      showMessage(getRandom());
-
-      // Counter update
-      updateCounter();
-
-      // Badge
-      badge.textContent = clicks;
-      badge.classList.add('show');
-
-      // Heart color
-      updateHeartColor();
-
-      // Milestone
-      if (milestones[clicks]) {
-        if (clicks === 50 || clicks === 100) spawnConfetti();
-        showToast(milestones[clicks]);
-      }
+  function spawnConfetti() {
+    const colors = ['#ff6fa8','#ffc2d4','#ffe4ec','#e8185c','#ffb3ce','#fff','#f4789a'];
+    for (let i = 0; i < 70; i++) {
+      const c = document.createElement('div'); c.className = 'confetti';
+      c.style.left = (10 + Math.random() * 80) + 'vw';
+      c.style.top = '-20px';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      c.style.setProperty('--dur', (1.5 + Math.random()*2) + 's');
+      c.style.animationDelay = (Math.random()*0.8) + 's';
+      document.body.appendChild(c);
+      c.addEventListener('animationend', () => c.remove());
     }
+  }
 
-    function updateCounter() {
-      counterNum.classList.add('show');
-      counterLabel.style.opacity = '1';
-      counterNum.textContent = clicks;
-      counterNum.classList.remove('pop');
-      void counterNum.offsetWidth;
-      counterNum.classList.add('pop');
-    }
-
-    function updateHeartColor() {
-      let color = heartColors[0].fill;
-      for (const stage of heartColors) {
-        if (clicks >= stage.at) color = stage.fill;
-      }
-      heartPath.style.fill = color;
-    }
-
-    function showMessage(html) {
-      if (msgEl.classList.contains('visible')) {
-        msgEl.classList.add('hiding');
-        setTimeout(() => {
-          msgEl.innerHTML = html;
-          msgEl.classList.remove('hiding', 'visible');
-          void msgEl.offsetWidth;
-          msgEl.classList.add('visible');
-        }, 280);
-      } else {
-        msgEl.innerHTML = html;
-        msgEl.classList.add('visible');
-      }
-    }
-
-    function showToast(text) {
-      toast.textContent = text;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3200);
-    }
-
-    function spawnParticles() {
-      const emojis = ['❤️', '🩷', '💕', '💗', '💓', '✨', '💖', '🌸', '💝', '🫶'];
-      const count = 6 + Math.floor(Math.random() * 6);
-      const rect = heartBtn.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      for (let i = 0; i < count; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        p.style.left = (cx + (Math.random() - 0.5) * 140) + 'px';
-        p.style.top  = (cy + (Math.random() - 0.5) * 80) + 'px';
-        p.style.fontSize = (13 + Math.random() * 18) + 'px';
-        p.style.setProperty('--dur', (1.4 + Math.random() * 1.2) + 's');
-        p.style.animationDelay = (Math.random() * 0.25) + 's';
-        document.body.appendChild(p);
-        p.addEventListener('animationend', () => p.remove());
-      }
-    }
-
-    function spawnConfetti() {
-      const colors = ['#ff6fa8','#ffc2d4','#ffe4ec','#e8185c','#ffb3ce','#fff'];
-      for (let i = 0; i < 60; i++) {
-        const c = document.createElement('div');
-        c.className = 'confetti';
-        c.style.left = (20 + Math.random() * 60) + 'vw';
-        c.style.top = '-20px';
-        c.style.background = colors[Math.floor(Math.random() * colors.length)];
-        c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-        c.style.setProperty('--dur', (1.5 + Math.random() * 2) + 's');
-        c.style.animationDelay = (Math.random() * 0.8) + 's';
-        document.body.appendChild(c);
-        c.addEventListener('animationend', () => c.remove());
-      }
-    }
+  // Vampire popup
+  function showVampire() {
+    document.getElementById('vampireOverlay').classList.add('show');
+  }
+  function closeVampire(e) {
+    if (e.target === document.getElementById('vampireOverlay'))
+      document.getElementById('vampireOverlay').classList.remove('show');
+  }
+  function closeVampireBtn() {
+    document.getElementById('vampireOverlay').classList.remove('show');
+  }
   </script>
 </body>
 </html>
